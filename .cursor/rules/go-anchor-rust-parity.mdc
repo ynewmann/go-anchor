@@ -1,0 +1,78 @@
+---
+description: Compare Go Anchor code with official Rust Anchor functionality for parity
+globs: **/*.go
+alwaysApply: false
+---
+
+# Go Anchor ↔ Rust Anchor Parity
+
+When implementing or reviewing Go Solana Anchor code, verify it matches the official [Rust Anchor](https://www.anchor-lang.com/) behavior. Use this mapping as the source of truth.
+
+## Core Concepts
+
+| Rust Anchor | Go Equivalent | Notes |
+|-------------|---------------|-------|
+| `declare_id!("...")` | `var ProgramID = solana.MustPublicKeyFromBase58("...")` | Program address constant |
+| `#[program]` module | N/A (program-side) | Instruction dispatch; Go focuses on client |
+| `Context<AccountsStruct>` | `anchor.Context` with `Accounts`, `ProgramID`, `Bumps` | First arg to instruction handlers |
+| `#[account]` struct | Struct with Borsh tags + 8-byte discriminator | Account data layout |
+
+## Account Types
+
+| Rust | Go | Validation |
+|------|----|-----------|
+| `Account<'info, T>` | `*Account[T]` | Owner check, discriminator, deserialize |
+| `AccountLoader<'info, T>` | `*AccountLoader[T]` | Zero-copy for large accounts |
+| `UncheckedAccount<'info>` | `*UncheckedAccount` | No validation |
+| `Signer<'info>` | `Signer` | Transaction signer check |
+| `Program<'info, System>` | `*Program` | Executable, matches program ID |
+| `SystemAccount<'info>` | `*SystemAccount` | Owner == System Program |
+
+## Account Constraints (Client-Side Mapping)
+
+When building instructions or validating accounts, ensure Go logic mirrors these constraints:
+
+| Rust `#[account(...)]` | Go validation / behavior |
+|------------------------|--------------------------|
+| `init` | Account created via CPI; space allocated; payer set |
+| `init_if_needed` | Same as init but no-op if account exists |
+| `mut` | Account included as writable in instruction |
+| `signer` | Signer in transaction |
+| `seeds = [...], bump` | Derive PDA; validate address matches |
+| `has_one = field` | Account.field == other_account.key |
+| `address = expr` | account.Key == expr |
+| `owner = expr` | account.Owner == expr |
+| `close = target` | Lamports sent to target on close |
+| `constraint = expr` | Custom boolean check |
+| `realloc` | Resize account; payer for delta |
+| `token::mint`, `token::authority` | SPL Token account constraints |
+| `associated_token::*` | ATA validation |
+
+## Discriminators
+
+- **Account**: `sha256("account:" + type_name)[0:8]`
+- **Instruction**: `sha256("global:" + instruction_name)[0:8]`
+- **Event**: `sha256("event:" + event_name)[0:8]`
+
+Go must use the same byte order and hashing as Rust.
+
+## Serialization
+
+- Use **Borsh** for account data, instruction args, events.
+- Layout must match Rust `borsh::BorshSerialize` / `BorshDeserialize`.
+- Anchor adds 8-byte discriminator before account/event payload.
+
+## IDL Alignment
+
+- Parse IDL v0.30+ (`address`, `metadata`, `instructions`, `accounts`, `types`, `events`, `errors`).
+- Instruction `discriminator` is 8-byte array; map to instruction selector.
+- Account `discriminator` used for validation and decoding.
+
+## Parity Checklist for New Code
+
+1. [ ] Discriminators match Anchor (account, instruction, event)
+2. [ ] Borsh layout matches Rust for shared types
+3. [ ] PDA derivation uses same seeds + program ID
+4. [ ] CPI `invoke_signed` uses correct signer seeds
+5. [ ] Error codes map to IDL `errors`
+6. [ ] Events decode from program logs per IDL
