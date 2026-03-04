@@ -1,9 +1,24 @@
 ---
-description: Sync with remote; never work on master; PR-only merges; review and refine commits
+description: Sync with remote; never work on master; use GitHub MCP; PR-only merges
 alwaysApply: true
 ---
 
 # Pre-Push Workflow
+
+## GitHub MCP (user-GitHub)
+
+Use GitHub MCP for all GitHub interactions. Do not use git for GitHub API operations when MCP tools exist.
+
+| Operation | MCP Tool |
+|-----------|----------|
+| Create branch | `create_branch` |
+| Push files (commit to branch) | `push_files` |
+| Create PR | `create_pull_request` |
+| List/read PRs | `list_pull_requests`, `pull_request_read` |
+| Review & approve | `pull_request_review_write` (event: APPROVE) |
+| Merge PR | `merge_pull_request` |
+| List branches/commits | `list_branches`, `list_commits` |
+| Get file contents | `get_file_contents` |
 
 ## 1. Never Work on master
 
@@ -46,7 +61,7 @@ Before pushing, ensure commits are well-structured:
 - **Split into small commits** — each commit should be easy to review
 - **One logical change per commit** — a finished feature, fix, or refactor
 - **Atomic commits** — each commit should be complete and self-contained; the repo should build and tests should pass after any commit
-- **Clear messages** — use imperative mood (e.g. `Add IDL parser`, `Fix discriminator hashing`)
+- **Clear messages** — use imperative mood (e.g. `Add IDL parser`, `Fix discriminator hasinging`)
 
 ### ✅ Good
 ```
@@ -69,21 +84,7 @@ git rebase -i main   # or your base branch
 
 ## 5. All Changes to main via Pull Request
 
-- **No direct merges to main** — every change must go through a PR
-- **After each feature**: push branch → create PR → review → merge into main
+- **No direct merges to main** — use GitHub MCP: create PR, review, merge
+- **After each feature**: push files or git push → `create_pull_request` → `pull_request_review_write` (APPROVE) → `merge_pull_request`
 - **Scope**: [github.com/ynewmann/go-anchor](https://github.com/ynewmann/go-anchor) only
-
-### PR Format
-
-- **Title**: Short, imperative (e.g. `feat(idl): add IDL JSON parser`, `fix(borsh): correct u64 encoding`)
-- **Description**: Brief summary of what the feature does and what changed
-
-### Example PR
-```
-Title: feat(idl): add IDL v0.30 JSON parsing
-
-Description:
-- Parse address, metadata, instructions, accounts, types from IDL
-- Support instruction and account discriminators
-- Map Anchor types to Go (u64, pubkey, string, etc.)
-```
+- **PR format**: Short imperative title; short description of features/changes
