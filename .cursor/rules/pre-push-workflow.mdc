@@ -1,5 +1,5 @@
 ---
-description: Sync with remote; never work on master; review and refine commits before push
+description: Sync with remote; never work on master; PR-only merges; review and refine commits
 alwaysApply: true
 ---
 
@@ -65,4 +65,25 @@ refactor(client): extract instruction builder into separate package
 git rebase -i main   # or your base branch
 # Use "pick" / "edit" / "squash" to reorganize
 # Or: git add -p to stage parts of changes into separate commits
+```
+
+## 5. All Changes to main via Pull Request
+
+- **No direct merges to main** — every change must go through a PR
+- **After each feature**: push branch → create PR → review → merge into main
+- **Scope**: [github.com/ynewmann/go-anchor](https://github.com/ynewmann/go-anchor) only
+
+### PR Format
+
+- **Title**: Short, imperative (e.g. `feat(idl): add IDL JSON parser`, `fix(borsh): correct u64 encoding`)
+- **Description**: Brief summary of what the feature does and what changed
+
+### Example PR
+```
+Title: feat(idl): add IDL v0.30 JSON parsing
+
+Description:
+- Parse address, metadata, instructions, accounts, types from IDL
+- Support instruction and account discriminators
+- Map Anchor types to Go (u64, pubkey, string, etc.)
 ```
