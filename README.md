@@ -12,7 +12,8 @@ Go client library and tooling for interacting with [Solana Anchor](https://www.a
 - **CPI** — Cross-program invocation context and helpers
 - **Events & errors** — Parse events from logs and map program errors from IDL
 - **SPL** — Token and Associated Token Account helpers
-- **CLI** — `go-anchor idl fetch|validate|convert`
+- **CLI** — `go-anchor idl fetch|validate|convert|gen`
+- **Code generation** — Generate type-safe Go client from IDL
 
 ## Installation
 
@@ -20,7 +21,7 @@ Go client library and tooling for interacting with [Solana Anchor](https://www.a
 go get github.com/ynewmann/go-anchor
 ```
 
-The module name is `go-solana-sdk`; use it in imports: `go-solana-sdk/idl`, `go-solana-sdk/client`, etc.
+The module name is `go-solana-anchor`; use it in imports: `go-solana-anchor/idl`, `go-solana-anchor/client`, etc.
 
 ## Usage
 
@@ -29,8 +30,8 @@ The module name is `go-solana-sdk`; use it in imports: `go-solana-sdk/idl`, `go-
 ```go
 import (
     "github.com/gagliardetto/solana-go/rpc"
-    "go-solana-sdk/client"
-    "go-solana-sdk/idl"
+    "go-solana-anchor/client"
+    "go-solana-anchor/idl"
 )
 
 idlData, _ := os.ReadFile("idl.json")
@@ -60,9 +61,31 @@ go-anchor idl validate idl.json
 
 # Convert legacy IDL to v0.30
 go-anchor idl convert legacy.json -o v30.json
+
+# Generate type-safe Go client from IDL
+go-anchor idl gen -i idl.json -o pkg/generated -p counter
 ```
 
 Set `RPC_URL` for a custom RPC endpoint (default: mainnet-beta).
+
+### Generated client
+
+After running `idl gen`, use the typed client:
+
+```go
+import (
+    "github.com/gagliardetto/solana-go/rpc"
+    "go-solana-anchor/idl"
+    "your-module/counter"  // generated package
+)
+
+idlData, _ := os.ReadFile("idl.json")
+parsed, _ := idl.Parse(idlData)
+rpcClient := rpc.New("https://api.mainnet-beta.solana.com")
+
+client := counter.NewClient(parsed, rpcClient)
+ix, err := client.Increment(counter.IncrementAccounts{Counter: counterPubkey})
+```
 
 ## Project layout
 

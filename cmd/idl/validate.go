@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"go-solana-sdk/idl"
+	"go-solana-anchor/idl"
 )
 
 // ValidateIDL reads and validates an IDL JSON file.

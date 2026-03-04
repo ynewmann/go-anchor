@@ -13,7 +13,7 @@ import (
 
 	"github.com/gagliardetto/solana-go"
 	"github.com/gagliardetto/solana-go/rpc"
-	"go-solana-sdk/idl"
+	"go-solana-anchor/idl"
 )
 
 // FetchIDL fetches the IDL from chain for the given program ID and writes to output path.

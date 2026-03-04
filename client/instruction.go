@@ -5,9 +5,9 @@ import (
 	"fmt"
 
 	"github.com/gagliardetto/solana-go"
-	"go-solana-sdk/accounts"
-	"go-solana-sdk/idl"
-	"go-solana-sdk/internal/borsh"
+	"go-solana-anchor/accounts"
+	"go-solana-anchor/idl"
+	"go-solana-anchor/internal/borsh"
 )
 
 // ArgsEncoder is a function that encodes instruction arguments to Borsh.

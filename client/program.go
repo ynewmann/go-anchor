@@ -4,7 +4,7 @@ package client
 import (
 	"github.com/gagliardetto/solana-go"
 	"github.com/gagliardetto/solana-go/rpc"
-	"go-solana-sdk/idl"
+	"go-solana-anchor/idl"
 )
 
 // Program is an Anchor program client.

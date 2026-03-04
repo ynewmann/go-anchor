@@ -2,7 +2,7 @@ package accounts
 
 import (
 	"encoding/hex"
-	"go-solana-sdk/idl"
+	"go-solana-anchor/idl"
 	"testing"
 )
 

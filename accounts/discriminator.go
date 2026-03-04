@@ -3,7 +3,7 @@ package accounts
 
 import (
 	"crypto/sha256"
-	"go-solana-sdk/idl"
+	"go-solana-anchor/idl"
 )
 
 // AccountDiscriminator returns the 8-byte discriminator for an account type.
