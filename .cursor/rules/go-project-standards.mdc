@@ -1,0 +1,24 @@
+---
+description: Follow Go project layout and add unit tests for important features
+globs: **/*.go
+alwaysApply: false
+---
+
+# Go Project Standards
+
+## Project Layout
+
+Follow standard [Go project layout](https://github.com/golang-standards/project-layout):
+
+- `/cmd/` — main applications (e.g. `cmd/go-anchor/`)
+- `/idl/`, `/client/`, `/accounts/`, etc. — library packages
+- `/internal/` — private packages (not importable by others)
+- `/pkg/` — reusable library code (optional)
+- `*_test.go` — tests colocated with source
+
+## Unit Tests
+
+- Add unit tests for **important features** (IDL parsing, encoding, discriminators, PDA derivation, etc.)
+- Test files: `*_test.go` in the same package
+- Use table-driven tests where appropriate
+- Aim for coverage of critical paths and edge cases

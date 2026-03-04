@@ -61,7 +61,7 @@ Before pushing, ensure commits are well-structured:
 - **Split into small commits** — each commit should be easy to review
 - **One logical change per commit** — a finished feature, fix, or refactor
 - **Atomic commits** — each commit should be complete and self-contained; the repo should build and tests should pass after any commit
-- **Clear messages** — use imperative mood (e.g. `Add IDL parser`, `Fix discriminator hasinging`)
+- **Clear messages** — use imperative mood (e.g. `Add IDL parser`, `Fix discriminator hashing`)
 
 ### ✅ Good
 ```
