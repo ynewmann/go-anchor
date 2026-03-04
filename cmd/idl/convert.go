@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"go-solana-sdk/idl"
+	"go-solana-anchor/idl"
 )
 
 // ConvertIDL performs basic legacy IDL to v0.30 format conversion.

@@ -1,4 +1,4 @@
-module go-solana-sdk
+module go-solana-anchor
 
 go 1.23.4
 

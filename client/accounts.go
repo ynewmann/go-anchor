@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"fmt"
 
-	"go-solana-sdk/accounts"
-	"go-solana-sdk/idl"
-	"go-solana-sdk/internal/borsh"
+	"go-solana-anchor/accounts"
+	"go-solana-anchor/idl"
+	"go-solana-anchor/internal/borsh"
 )
 
 // AccountDecoder is a function that decodes account data from a Borsh decoder.

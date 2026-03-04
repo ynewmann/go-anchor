@@ -1,0 +1,11 @@
+{
+  "address": "11111111111111111111111111111111",
+  "metadata": { "name": "testprog", "version": "0.1.0", "spec": "0.1.0" },
+  "instructions": [{ "name": "doStuff", "discriminator": [0,0,0,0,0,0,0,0], "accounts": [], "args": [] }],
+  "accounts": [],
+  "types": [],
+  "errors": [
+    { "code": 6000, "name": "Unauthorized", "msg": "Not authorized" },
+    { "code": 6001, "name": "InsufficientFunds" }
+  ]
+}

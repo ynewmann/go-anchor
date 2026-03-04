@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"fmt"
 
-	"go-solana-sdk/idl"
+	"go-solana-anchor/idl"
 )
 
 // ProgramError wraps an Anchor program error with its IDL metadata.

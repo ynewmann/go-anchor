@@ -2,8 +2,8 @@ package accounts
 
 import (
 	"bytes"
-	"go-solana-sdk/idl"
-	"go-solana-sdk/internal/borsh"
+	"go-solana-anchor/idl"
+	"go-solana-anchor/internal/borsh"
 )
 
 // BuildInstructionData builds instruction data: discriminator + Borsh-encoded args.

@@ -4,9 +4,9 @@ import (
 	"encoding/base64"
 	"testing"
 
-	"go-solana-sdk/accounts"
-	"go-solana-sdk/idl"
-	"go-solana-sdk/internal/borsh"
+	"go-solana-anchor/accounts"
+	"go-solana-anchor/idl"
+	"go-solana-anchor/internal/borsh"
 )
 
 func TestParseEventFromLogs(t *testing.T) {

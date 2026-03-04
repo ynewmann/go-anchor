@@ -4,7 +4,7 @@ import (
 	"encoding/binary"
 	"testing"
 
-	"go-solana-sdk/idl"
+	"go-solana-anchor/idl"
 )
 
 func TestParseProgramError(t *testing.T) {

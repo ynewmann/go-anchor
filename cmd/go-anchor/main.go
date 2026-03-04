@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	idlcmd "go-solana-sdk/cmd/idl"
+	idlcmd "go-solana-anchor/cmd/idl"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 	case "idl":
 		idlCmd.Parse(os.Args[2:])
 		if idlCmd.NArg() < 1 {
-			fmt.Fprintln(os.Stderr, "Usage: go-anchor idl <fetch|validate|convert> [args...]")
+			fmt.Fprintln(os.Stderr, "Usage: go-anchor idl <fetch|validate|convert|gen> [args...]")
 			os.Exit(1)
 		}
 		runIDL(idlCmd.Args())
@@ -35,6 +35,7 @@ func printUsage() {
 	fmt.Fprintln(os.Stderr, "  idl fetch <program_id> -o idl.json    Fetch IDL from chain")
 	fmt.Fprintln(os.Stderr, "  idl validate idl.json                 Validate IDL file")
 	fmt.Fprintln(os.Stderr, "  idl convert legacy.json -o v30.json   Convert legacy IDL to v0.30")
+	fmt.Fprintln(os.Stderr, "  idl gen -i idl.json -o pkg/ -p pkg    Generate Go client from IDL")
 }
 
 func runIDL(args []string) {
@@ -100,6 +101,31 @@ func runIDL(args []string) {
 			os.Exit(1)
 		}
 		fmt.Printf("Converted IDL written to %s\n", out)
+	case "gen":
+		input := ""
+		out := "."
+		pkg := ""
+		for i := 0; i < len(rest); i++ {
+			if rest[i] == "-i" && i+1 < len(rest) {
+				input = rest[i+1]
+				i++
+			} else if rest[i] == "-o" && i+1 < len(rest) {
+				out = rest[i+1]
+				i++
+			} else if rest[i] == "-p" && i+1 < len(rest) {
+				pkg = rest[i+1]
+				i++
+			}
+		}
+		if input == "" {
+			fmt.Fprintln(os.Stderr, "Usage: go-anchor idl gen -i idl.json -o <dir> [-p package]")
+			os.Exit(1)
+		}
+		if err := idlcmd.Generate(input, idlcmd.GenOpts{Package: pkg, Output: out}); err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("Generated Go client in %s\n", out)
 	default:
 		fmt.Fprintf(os.Stderr, "Unknown idl subcommand: %s\n", sub)
 		os.Exit(1)
